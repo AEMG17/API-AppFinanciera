@@ -3,19 +3,16 @@ import * as financesModel from '../model/finances.model.js';
 
 export const getIncomes = async (req, res) => {
     try {
-        const token = req.headers['x-access-token']; // Se accede al token en el encabezado de la peticion HTTP
+        const token = req.headers['x-access-token']; 
 
-        // El token de autenticación se analiza, si es valido se consigue el ID almacenado en Auth.
         const decoded = decodeToken(token);
 
-        if(decoded.id){ // Si tiene ID en el objeto decoded.
-            // Procede a llamar al modelo para que cargue de la DB los ingresos.
+        if(decoded.id){ 
             const incomes = await financesModel.getIncomes(decoded.id);
             return res.status(200).json(incomes);
         }
 
-        // Siempre que se llama un error, es porque sera manejado en el catch.
-        // (O se da por sentado que la peticion de arriba salio mal.)
+        
         throw new Error('No se pudo realizar esta operación')
         
     } catch (error) {
@@ -25,20 +22,20 @@ export const getIncomes = async (req, res) => {
 
 export const addIncome = async (req, res) => {
     try {
-        const { title, amount } = req.body; // Se consigue el titulo y monto del ingreso.
+        const { title, amount } = req.body; 
 
         const token = req.headers['x-access-token'];
 
         const decoded = decodeToken(token);
 
-        if(!amount > 0){ // Chequea el monto sea mayor a 0
+        if(!amount > 0){ 
             throw new Error('Ingresa un monto superior a 0')
         }
 
         if(decoded.id){
-            // Se procede a ingresar el nuevo ingreso en caso del token ser valido.
+            
             const submitNewIncome = await financesModel.addIncome(amount, decoded.id, title);
-            if(submitNewIncome > 0){ // Si el numero de filas modificadas es mas de 0, la operacion fue exitosa
+            if(submitNewIncome > 0){ 
                 return res.status(200).json({message: "Ingreso añadido correctamente"});
             }
         }
@@ -125,7 +122,7 @@ export const addBill = async (req, res) => {
 
         if(decoded.id){
             const submitNewBill = await financesModel.addBill(amount, decoded.id, title);
-            if(submitNewBill > 0){ // Si la cantidad de filas afectadas es mayor a 0 es porque se creo el registro.
+            if(submitNewBill > 0){ 
                 return res.status(200).json({message: "Gasto añadido correctamente"});
             }
         }
@@ -151,7 +148,7 @@ export const removeBill = async (req, res) => {
                 return res.status(200).json({message: "Gasto eliminado"});
         }
 
-        throw new Error('No se pudo eliminar el gasto, intente denuevo');
+        throw new Error('No se pudo eliminar el gasto, intente de nuevo');
         
     } catch (error) {
         return res.status(500).json({error: error.message});
@@ -172,7 +169,7 @@ export const updateBill = async (req, res) => {
                 return res.status(200).json({message: "Gasto actualizado"});
         }
 
-        throw new Error('No se pudo actualizar el gasto, intente denuevo');
+        throw new Error('No se pudo actualizar el gasto, intente de nuevo');
         
     } catch (error) {
         return res.status(500).json({error: error.message})

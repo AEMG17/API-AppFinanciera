@@ -3,7 +3,6 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-// Funciona para comprobar la extension del archivo
 function getFileTypeByExtension(fileName) {
     const fileExtension = path.extname(fileName).toLowerCase();
 
@@ -33,10 +32,9 @@ const storage = multer.diskStorage({
         let uploadPath = '';
 
         if (fileType === 'jpg' || fileType === 'jpeg' || fileType === 'png' || fileType === 'gif' || fileType === "bmp" || fileType === "svg" || fileType === "webp" || fileType === "ico" || fileType === "tiff" || fileType === "tif") {
-            // Crea una carpeta para cada tipo de archivo
             uploadPath = `public/profiles/`;
         } else {
-            // Si el tipo de archivo es desconocido, guarda en 'uploads/unknown/'
+            
             uploadPath = 'public/unknown/';
         }
 
@@ -57,7 +55,6 @@ export const uploadImage = (imageFieldName) => {
                 return res.status(500).json({ error: err.message });
             }
 
-            // Construir la URL de la imagen basada en la configuración de storage
             const imageUrl = `https://${req.get('host')}/public/profiles/${req.file.filename}`;
 
             if (req.file.size > 3000000) {
@@ -68,7 +65,6 @@ export const uploadImage = (imageFieldName) => {
             req.imageBlankUrl = req.file.filename;
             req.imageUrl = imageUrl;
 
-            // Continúa con el siguiente middleware o manejo de la ruta
             next();
         });
     };

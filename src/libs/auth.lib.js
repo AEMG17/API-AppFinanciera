@@ -5,8 +5,7 @@ import config from './config.js';
 
 export const hashPassword = async (password) => {
     try {
-        const salt = 10; // Cantidad de rondas para el algoritmo de hasheo
-        // Genera un hash para la contraseña nueva
+        const salt = 10;
         return await bcrypt.hash(password, salt);
     } catch (error) {
         return "";
@@ -15,7 +14,7 @@ export const hashPassword = async (password) => {
 
 export const comparePassword = async (password, hash) => {
     try {
-        return await bcrypt.compare(password, hash); // Compara las contraseñas y retorna true/false
+        return await bcrypt.compare(password, hash);
     } catch (error) {
         return false;
     }
@@ -23,7 +22,7 @@ export const comparePassword = async (password, hash) => {
 
 export const createToken = (identifier, time) => {
     try {
-        return jwt.sign({id: identifier}, config.SECRET, {expiresIn: time}); // Firma el token, con clave secreta, id  y tiempo de expiracion
+        return jwt.sign({id: identifier}, config.SECRET, {expiresIn: time});
     } catch (error) {
         return error.message;
     }
@@ -31,7 +30,7 @@ export const createToken = (identifier, time) => {
 
 export const decodeToken = (token) => {
     try {
-        return jwt.verify(token, config.SECRET) // Desencripta el token de la peticion.
+        return jwt.verify(token, config.SECRET)
     } catch (error) {
         return {};
     }
